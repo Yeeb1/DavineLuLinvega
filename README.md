@@ -109,6 +109,21 @@ This script captures the output of a terminal command and sends it to Discord. I
 └─$ dclog.py cat large_file.txt
 ```
 
+#### Quick Usage
+
+With an alias set up, you can use the `!!` command in combination with an alias like `dl` to send the output of your last terminal command directly to Discord.
+
+```bash
+┌──(kalikali)-[~/DavineLuLinvega]
+└─$ ls -la
+# You want to send this output to Discord
+┌──(kalikali)-[~/DavineLuLinvega]
+└─$ dl !!
+```
+
+- **`!!`** repeats the last command you executed.
+- **`dl !!`** runs `dclog.py` with the output of the previous command, sending it directly to your Discord channel.
+
 ### dcsend.py
 
 This script uploads files to Discord using a webhook.
