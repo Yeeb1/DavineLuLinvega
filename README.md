@@ -3,7 +3,7 @@
 <p align="center">
   <img src="https://i.pinimg.com/originals/80/2f/c1/802fc1cd743108d1bc271203d217856e.jpg" width="400">
 
-# Scripts for quickly sending tool outputs, files, and clipboard content to Discord channels 
+# Scripts for quickly sending CLI stuff to Discord channels 
 
 This repository contains a set of Python scripts designed to help in the process of sharing files, tool output, and clipboard content via Discord during CTFs or competitive hacking events. These tools enable quick and efficient sharing of command output, files, and clipboard data to designated Discord channels or threads, making team collaboration easier and faster.
 
