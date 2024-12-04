@@ -12,7 +12,7 @@ def load_config():
     """Load the JSON configuration file, ensuring 'webhooks' and 'threads' keys exist."""
     if not os.path.exists(CONFIG_PATH):
         return {"webhooks": {}, "threads": {}}
-    
+
     with open(CONFIG_PATH, 'r') as f:
         config = json.load(f)
 
@@ -68,28 +68,53 @@ def add_webhook(name, url, set_default=False):
     save_config(config)
     print(f"Added webhook '{name}' with URL: {url}")
     if set_default:
-        set_default_webhook(name)
+        update_env_variable("DISCORD_WEBHOOK_URL", url)
+        print(f"Set default webhook to '{name}'")
 
 
-def set_default_webhook(name):
+def set_default_webhook():
     """Set a webhook as the default by updating the ~/.env file."""
     config = load_config()
-    if name not in config["webhooks"]:
-        print(f"Webhook '{name}' not found.")
+    if not config["webhooks"]:
+        print("No webhooks available to set as default.")
         return
-    update_env_variable("DISCORD_WEBHOOK_URL", config["webhooks"][name])
-    print(f"Set default webhook to '{name}'")
+    print("Available Webhooks:")
+    webhook_names = list(config["webhooks"].keys())
+    for idx, name in enumerate(webhook_names):
+        print(f"{idx + 1}) {name}: {config['webhooks'][name]}")
+    try:
+        selection = int(input("Select a webhook to set as default: "))
+        if 1 <= selection <= len(webhook_names):
+            name = webhook_names[selection - 1]
+            update_env_variable("DISCORD_WEBHOOK_URL", config["webhooks"][name])
+            print(f"Set default webhook to '{name}'")
+        else:
+            print("Invalid selection.")
+    except ValueError:
+        print("Invalid input.")
 
 
-def remove_webhook(name):
+def remove_webhook():
     """Remove a saved webhook."""
     config = load_config()
-    if name in config["webhooks"]:
-        del config["webhooks"][name]
-        save_config(config)
-        print(f"Removed webhook '{name}'")
-    else:
-        print(f"Webhook '{name}' not found.")
+    if not config["webhooks"]:
+        print("No webhooks to remove.")
+        return
+    print("Available Webhooks:")
+    webhook_names = list(config["webhooks"].keys())
+    for idx, name in enumerate(webhook_names):
+        print(f"{idx + 1}) {name}: {config['webhooks'][name]}")
+    try:
+        selection = int(input("Select a webhook to remove: "))
+        if 1 <= selection <= len(webhook_names):
+            name = webhook_names[selection - 1]
+            del config["webhooks"][name]
+            save_config(config)
+            print(f"Removed webhook '{name}'")
+        else:
+            print("Invalid selection.")
+    except ValueError:
+        print("Invalid input.")
 
 
 def list_threads():
@@ -108,16 +133,30 @@ def add_thread(name, thread_id, force=False):
     save_config(config)
     print(f"Added thread '{name}' with ID: {thread_id}")
     if force:
-        set_default_thread(name)
+        update_env_variable("THREAD_ID", thread_id)
+        print(f"Set default thread to '{name}'")
 
 
-def set_default_thread(name):
+def set_default_thread():
+    """Set a thread as the default by updating the ~/.env file."""
     config = load_config()
-    if name not in config["threads"]:
-        print(f"Thread '{name}' not found.")
+    if not config["threads"]:
+        print("No threads available to set as default.")
         return
-    update_env_variable("THREAD_ID", config["threads"][name])
-    print(f"Set default thread to '{name}'")
+    print("Available Threads:")
+    thread_names = list(config["threads"].keys())
+    for idx, name in enumerate(thread_names):
+        print(f"{idx + 1}) {name}: {config['threads'][name]}")
+    try:
+        selection = int(input("Select a thread to set as default: "))
+        if 1 <= selection <= len(thread_names):
+            name = thread_names[selection - 1]
+            update_env_variable("THREAD_ID", config["threads"][name])
+            print(f"Set default thread to '{name}'")
+        else:
+            print("Invalid selection.")
+    except ValueError:
+        print("Invalid input.")
 
 
 def enable_thread_ids():
@@ -135,11 +174,11 @@ def main():
         print("Usage:")
         print("  dcmanage.py list-webhooks")
         print("  dcmanage.py add-webhook <name> <url> [--default]")
-        print("  dcmanage.py set-default-webhook <name>")
-        print("  dcmanage.py remove-webhook <name>")
+        print("  dcmanage.py set-default-webhook")
+        print("  dcmanage.py remove-webhook")
         print("  dcmanage.py list-threads")
         print("  dcmanage.py add-thread <name> <thread_id> [--force]")
-        print("  dcmanage.py set-default-thread <name>")
+        print("  dcmanage.py set-default-thread")
         print("  dcmanage.py enable-thread")
         print("  dcmanage.py disable-thread")
         sys.exit(1)
@@ -153,12 +192,10 @@ def main():
         url = sys.argv[3]
         set_default = "--default" in sys.argv
         add_webhook(name, url, set_default)
-    elif command == "set-default-webhook" and len(sys.argv) == 3:
-        name = sys.argv[2]
-        set_default_webhook(name)
-    elif command == "remove-webhook" and len(sys.argv) == 3:
-        name = sys.argv[2]
-        remove_webhook(name)
+    elif command == "set-default-webhook":
+        set_default_webhook()
+    elif command == "remove-webhook":
+        remove_webhook()
     elif command == "list-threads":
         list_threads()
     elif command == "add-thread" and len(sys.argv) >= 4:
@@ -166,9 +203,8 @@ def main():
         thread_id = sys.argv[3]
         force = "--force" in sys.argv
         add_thread(name, thread_id, force)
-    elif command == "set-default-thread" and len(sys.argv) == 3:
-        name = sys.argv[2]
-        set_default_thread(name)
+    elif command == "set-default-thread":
+        set_default_thread()
     elif command == "enable-thread":
         enable_thread_ids()
     elif command == "disable-thread":
@@ -178,11 +214,11 @@ def main():
         print("Usage:")
         print("  dcmanage.py list-webhooks")
         print("  dcmanage.py add-webhook <name> <url> [--default]")
-        print("  dcmanage.py set-default-webhook <name>")
-        print("  dcmanage.py remove-webhook <name>")
+        print("  dcmanage.py set-default-webhook")
+        print("  dcmanage.py remove-webhook")
         print("  dcmanage.py list-threads")
         print("  dcmanage.py add-thread <name> <thread_id> [--force]")
-        print("  dcmanage.py set-default-thread <name>")
+        print("  dcmanage.py set-default-thread")
         print("  dcmanage.py enable-thread")
         print("  dcmanage.py disable-thread")
         sys.exit(1)
