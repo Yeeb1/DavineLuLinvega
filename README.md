@@ -11,17 +11,17 @@ A Python package containing CLI tools designed to help in the process of sharing
 
 Install directly from GitHub using pipx (recommended):
 ```bash
-pipx install git+https://github.com/username/DavineLuLinvega.git
+pipx install git+https://github.com/Yeeb1/DavineLuLinvega.git
 ```
 
 Or install using uv:
 ```bash
-uv tool install git+https://github.com/username/DavineLuLinvega.git
+uv tool install git+https://github.com/Yeeb1/DavineLuLinvega.git
 ```
 
 For development installation:
 ```bash
-git clone https://github.com/username/DavineLuLinvega.git
+git clone https://github.com/Yeeb1/DavineLuLinvega.git
 cd DavineLuLinvega
 pip install -e .
 ```
