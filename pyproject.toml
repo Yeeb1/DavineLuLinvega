@@ -1,0 +1,53 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "discord-cli"
+version = "1.0.0"
+description = "CLI tools for sharing files, output, and clipboard content via Discord webhooks during CTFs"
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.8"
+authors = [
+    {name = "Discord CLI Contributors"}
+]
+keywords = ["discord", "webhook", "ctf", "cli", "hacking", "collaboration"]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Information Technology",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: POSIX :: Linux",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Communications :: Chat",
+    "Topic :: System :: Shells",
+    "Topic :: Utilities",
+]
+dependencies = [
+    "requests>=2.25.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/yourusername/discord-cli"
+Repository = "https://github.com/yourusername/discord-cli"
+Issues = "https://github.com/yourusername/discord-cli/issues"
+
+[project.scripts]
+dc = "discord_cli.cli:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/discord_cli"]
+
+[tool.hatch.build.targets.sdist]
+include = [
+    "/src",
+    "/README.md",
+    "/pyproject.toml",
+]
